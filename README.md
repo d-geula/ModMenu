@@ -28,6 +28,8 @@ A **Mods** button in Valheim's main menu and in-world escape menu: manage every 
 
 In a loaded world, settings notify the owning mod immediately, but only settings that support live changes take effect without a restart. Mod on/off and profile changes always need a restart. Log out normally first: the restart button is unavailable in-world.
 
+Wheel scrolling is 3x faster in Mod Menu by default. In Mod Menu's own settings, adjust `UI/ScrollWheelMultiplier` (1 restores the original speed) and optionally enable `UI/AffectOtherMenus` for other Unity scroll menus. Changes apply immediately and do not change scrollbar dragging or gameplay wheel actions. Custom UI systems that bypass Unity's `ScrollRect.OnScroll` are not covered.
+
 Mod Menu and Jotunn cannot be switched off from the menu (you would lose the menu). If the game does not start after
 switching a mod off, delete `BepInEx/config/ModMenu/disabled.txt` and every mod loads again.
 

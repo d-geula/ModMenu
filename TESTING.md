@@ -1,6 +1,6 @@
 # In-world ModMenu development build
 
-The local package is `dist/ModMenu-0.2.1.zip`. This is a development build, not an upstream release.
+The local package is `dist/ModMenu-0.2.2.zip`. This is a development build, not an upstream release.
 
 ## Install
 
@@ -21,13 +21,15 @@ The ZIP includes both `plugins/ModMenu/ModMenu.dll` and `patchers/ModMenu/ModMen
 - Change a mod's enabled state or a profile. The status should explain that a restart is needed, and **Restart game** should be absent while in-world. Log out normally, then check it appears in the main menu.
 - Log out and load another world; reopen the window and check input is restored after closing.
 - With VikingQoL enabled, verify both escape-menu buttons remain usable.
+- In a long ModMenu list, compare wheel scrolling at UI/ScrollWheelMultiplier values 1 and 3. Check scrollbar dragging remains the same and the setting applies without reopening the window.
+- Enable UI/AffectOtherMenus and compare wheel scrolling in VikingQoL or another long Unity menu. Switch it off and check the other menu immediately returns to its original speed. Gameplay zoom, hotbar/build wheel controls and menus using other UI systems should remain unchanged.
 - If using multiplayer, check both host and client. The world continues running according to Valheim's normal pause rules.
 
 For errors, inspect the profile's `BepInEx/LogOutput.log` for `Mod Menu`, `ModMenu`, `Jotunn` or Harmony exceptions.
 
 ## Validation performed
 
-Release builds use the locally installed Valheim 1.0 assemblies, BepInEx 5.4.2351 and Jotunn 2.30.2, without deploying to the game or modifying a mod-manager profile. The existing unit tests cover config parsing and update/source matching; they do not validate Unity UI behaviour. In-game checks above remain manual.
+Release builds use the locally installed Valheim 1.0 assemblies, BepInEx 5.4.2351 and Jotunn 2.30.2, without deploying to the game or modifying a mod-manager profile. Unit tests cover config parsing, update/source matching, and scroll scaling scope/invalid values; they do not validate Unity UI behaviour. In-game checks above remain manual.
 
 ## Rebuild on this machine
 

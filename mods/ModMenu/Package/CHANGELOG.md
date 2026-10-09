@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.2 (development)
+- Configurable wheel/trackpad scrolling: 3x speed in Mod Menu by default; set UI/ScrollWheelMultiplier to 1 for the original speed.
+- UI/AffectOtherMenus optionally applies the multiplier to other Unity scroll menus. It is off by default. Changes take effect immediately.
+- Only wheel handling is scaled; scrollbar dragging, gameplay wheel actions and the menus' saved sensitivity values are unchanged.
+
 ## 0.2.1 (development)
 - Mods button in the in-world escape menu; Ctrl+M also opens it during gameplay.
 - Opening uses the normal pause menu and blocks gameplay input. Closing restores that menu; Escape/B does not close both windows at once.

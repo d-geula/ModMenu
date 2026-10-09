@@ -11,7 +11,9 @@ Adds a **Mods** button to Valheim's main menu and in-world escape menu.
 
 Settings are saved immediately and notify the owning mod; settings that support live changes can take effect in-world. Other settings require a restart. Mod on/off and profile changes always apply after a restart. The restart button is unavailable in-world: log out normally before restarting. The world follows Valheim's normal pause behaviour, so multiplayer keeps running.
 
-This 0.2.1 build is a development version for testing in-world access. Install it instead of the original ModMenu, not alongside it. Requires BepInEx and Jotunn.
+Wheel scrolling is 3x faster in Mod Menu by default. In **Mod Menu -> Settings -> UI**, adjust **ScrollWheelMultiplier** (1 restores the original speed) and optionally enable **AffectOtherMenus** to speed up other Unity scroll menus too. Both settings apply immediately. Scrollbar dragging and gameplay wheel actions are unchanged. Menus with custom scrolling that bypasses Unity's ScrollRect handler are not covered.
+
+This 0.2.2 build is a development version for testing in-world access and wheel scrolling. Install it instead of the original ModMenu, not alongside it. Requires BepInEx and Jotunn.
 
 Mod Menu and Jotunn cannot be switched off from the menu (you would lose the menu). Client-side only: other players and the server do not need it.
 
