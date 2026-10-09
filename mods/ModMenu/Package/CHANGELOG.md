@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.1 (development)
+- Mods button in the in-world escape menu; Ctrl+M also opens it during gameplay.
+- Opening uses the normal pause menu and blocks gameplay input. Closing restores that menu; Escape/B does not close both windows at once.
+- Shortcuts do not interrupt chat, text fields, loading screens, or other game dialogs. Input blocking is released when the window closes or is destroyed.
+- Restart is unavailable while a world is loaded. Log out normally first; mod on/off and profile changes still apply at the next restart.
+- Settings changes still notify the owning mod immediately; whether they apply live depends on that mod.
+
 ## 0.2.0
 - Works with far more mods: settings from every config file a mod uses (not only its main one), the ConfigurationManager Category, IsAdvanced and HideDefaultButton tags, and mods that turn auto-save off.
 - Big mods: sections fold (folded by default above 40 settings) and a settings search box.

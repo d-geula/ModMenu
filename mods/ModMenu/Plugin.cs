@@ -10,6 +10,8 @@ namespace ModMenu
     [BepInDependency(Jotunn.Main.ModGuid)]
     // Client-side tool only: never forces the other players or the server to have it.
     [NetworkCompatibility(CompatibilityLevel.NotEnforced, VersionStrictness.None)]
+    // Claim Ctrl+M before the minimap processes the unmodified M binding in its normal Update.
+    [UnityEngine.DefaultExecutionOrder(-100)]
     public class Plugin : BaseUnityPlugin
     {
         internal static Plugin Instance;
@@ -27,7 +29,7 @@ namespace ModMenu
                 "Check Nexus Mods and Thunderstore for newer versions the first time the menu is opened in a session.");
 
             OpenKey = Config.Bind("General", "OpenKey", new KeyboardShortcut(UnityEngine.KeyCode.M, UnityEngine.KeyCode.LeftControl),
-                "Opens the Mods window in the main menu - also when another mod reworks the menu and hides the button.");
+                "Opens the Mods window in the main menu or a loaded world. In a world, closing returns to the pause menu.");
 
             _harmony = new Harmony(PluginInfo.Guid);
             _harmony.PatchAll(typeof(Plugin).Assembly);
@@ -37,16 +39,24 @@ namespace ModMenu
 
         private void Update()
         {
+            if (UI.ModMenuWindow.IsOpen || !OpenKey.Value.IsDown())
+            {
+                return;
+            }
             FejdStartup startup = FejdStartup.instance;
-            if (startup != null && !UI.ModMenuWindow.IsOpen && startup.m_menuList != null && startup.m_menuList.activeInHierarchy
-                && OpenKey.Value.IsDown())
+            if (startup != null && startup.m_menuList != null && startup.m_menuList.activeInHierarchy)
             {
                 UI.MainMenuButton.OpenWindow(startup);
+            }
+            else if (UI.InGameMenuButton.CanOpen())
+            {
+                UI.InGameMenuButton.OpenWindow(Menu.instance);
             }
         }
 
         private void OnDestroy()
         {
+            UI.ModMenuWindow.CloseIfOpen();
             _harmony?.UnpatchSelf();
         }
     }

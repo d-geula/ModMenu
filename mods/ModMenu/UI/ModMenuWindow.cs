@@ -5,11 +5,12 @@ using BepInEx.Configuration;
 using Jotunn.Managers;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 namespace ModMenu.UI
 {
     /// <summary>
-    /// The window opened from the main menu: the mod list (switch on/off, update state, links), one mod's settings, and
+    /// The window opened from either menu: the mod list (switch on/off, update state, links), one mod's settings, and
     /// the profiles. Lives in Jotunn's CustomGUIFront, which is rebuilt with the scene, so it is created on demand.
     /// </summary>
     internal sealed class ModMenuWindow : MonoBehaviour
@@ -37,6 +38,8 @@ namespace ModMenu.UI
         // Rows are rebuilt on the next frame, never inside the click handler of a control that the rebuild destroys.
         private bool _dirty;
         private bool _typingLastFrame;
+        private bool _inputBlocked;
+        private int _inputScene;
 
         private Text _title;
         private Text _status;
@@ -55,7 +58,12 @@ namespace ModMenu.UI
         private const int ExpandedLimit = 40;
         private RectTransform _list;
 
-        public static bool IsOpen => _instance != null && _instance.gameObject.activeSelf;
+        public static bool IsOpen => _instance != null && _instance.gameObject.activeInHierarchy;
+
+        internal static void CloseIfOpen()
+        {
+            if (IsOpen) _instance.Close();
+        }
 
         public static void Open(Action onClosed)
         {
@@ -82,10 +90,21 @@ namespace ModMenu.UI
             }
             _instance._onClosed = onClosed;
             _instance._view = View.Mods;
-            _instance.gameObject.SetActive(true);
-            _instance.transform.SetAsLastSibling();
-            _instance.FitToScreen();
-            _instance.Rebuild();
+            try
+            {
+                _instance.gameObject.SetActive(true);
+                _instance._typingLastFrame = false;
+                _instance.transform.SetAsLastSibling();
+                _instance.FitToScreen();
+                _instance.BlockGameplayInput();
+                _instance.Rebuild();
+            }
+            catch (Exception e)
+            {
+                Plugin.Log.LogError($"Could not open the Mods window: {e}");
+                _instance.Close();
+                return;
+            }
 
             if (!_checkedThisSession && Plugin.CheckUpdatesOnOpen.Value)
             {
@@ -115,6 +134,11 @@ namespace ModMenu.UI
 
         private void Update()
         {
+            if (Game.instance != null && Game.instance.IsShuttingDown())
+            {
+                Close();
+                return;
+            }
             if (_dirty)
             {
                 _dirty = false;
@@ -142,10 +166,34 @@ namespace ModMenu.UI
 
         private void OnDestroy()
         {
+            ReleaseGameplayInput();
             if (_instance == this)
             {
                 _instance = null;
             }
+        }
+
+        private void BlockGameplayInput()
+        {
+            if (!_inputBlocked && SceneManager.GetActiveScene().name == "main")
+            {
+                _inputScene = SceneManager.GetActiveScene().handle;
+                GUIManager.BlockInput(true);
+                _inputBlocked = true;
+            }
+        }
+
+        private void OnDisable()
+        {
+            ReleaseGameplayInput();
+        }
+
+        private void ReleaseGameplayInput()
+        {
+            if (!_inputBlocked) return;
+            _inputBlocked = false;
+            // Jotunn resets its counter when rebuilding the GUI in a new scene.
+            if (SceneManager.GetActiveScene().handle == _inputScene) GUIManager.BlockInput(false);
         }
 
         // ------------------------------------------------------------------ building
@@ -276,14 +324,14 @@ namespace ModMenu.UI
             UiKit.SetEnabled(_updatesButton, !UpdateChecker.Running);
 
             bool restart = ModCatalog.RestartNeeded;
-            _restartButton.gameObject.SetActive(restart);
+            _restartButton.gameObject.SetActive(restart && !GameRestart.IsWorldLoaded);
             if (!ModCatalog.PatcherActive)
             {
                 SetStatus(T.Get("no_patcher"), Color.red);
             }
             else if (restart)
             {
-                SetStatus(T.Get("restart_needed"), gui.ValheimYellow);
+                SetStatus(T.Get(GameRestart.IsWorldLoaded ? "restart_in_world" : "restart_needed"), gui.ValheimYellow);
             }
             // Update news belongs to the mod list; the settings and profile views keep the line for their own notices.
             else if (_view == View.Config)

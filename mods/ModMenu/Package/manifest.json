@@ -1,8 +1,8 @@
 {
   "name": "ModMenu",
-  "version_number": "0.2.0",
+  "version_number": "0.2.1",
   "website_url": "https://github.com/Dismonder/ModMenu",
-  "description": "A Mods button in the main menu: switch mods on/off without touching files (Vortex-safe), edit every mod's settings, save mod profiles, and see updates from Nexus Mods and Thunderstore.",
+  "description": "Development build: Mods menu in the main menu and loaded worlds. Edit settings live where supported, manage mods for the next restart, profiles, and update checks.",
   "dependencies": [
     "denikson-BepInExPack_Valheim-5.4.2350",
     "ValheimModding-Jotunn-2.30.2"

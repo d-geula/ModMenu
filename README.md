@@ -2,7 +2,7 @@
 
 ![Mod Menu](mods/ModMenu/Package/icon.png)
 
-A **Mods** button in Valheim's main menu: manage every installed mod without leaving the game.
+A **Mods** button in Valheim's main menu and in-world escape menu: manage every installed mod without leaving the game.
 
 | | |
 |---|---|
@@ -23,8 +23,10 @@ A **Mods** button in Valheim's main menu: manage every installed mod without lea
 - **Profiles**: save which mods are off (e.g. "co-op" and "solo") and switch in one click.
 - **Update check** against Nexus Mods (Vortex and hand installs) and Thunderstore. No account or API key needed.
   Nothing is downloaded; the *Page* button opens the mod's page.
-- **Ctrl+M** opens the menu too (`General/OpenKey`), handy when another mod reworks the main menu. Gamepad B closes it.
+- **Ctrl+M** opens the menu too (`General/OpenKey`), including during gameplay. Gamepad B closes it. In-world access uses the normal pause menu and blocks gameplay input; closing returns to the escape menu. Multiplayer follows the game's normal pause rules and keeps running.
 - English and Polish (follows the game's language). Client-side only: other players and the server do not need it.
+
+In a loaded world, settings notify the owning mod immediately, but only settings that support live changes take effect without a restart. Mod on/off and profile changes always need a restart. Log out normally first: the restart button is unavailable in-world.
 
 Mod Menu and Jotunn cannot be switched off from the menu (you would lose the menu). If the game does not start after
 switching a mod off, delete `BepInEx/config/ModMenu/disabled.txt` and every mod loads again.

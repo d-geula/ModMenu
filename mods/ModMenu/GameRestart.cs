@@ -8,6 +8,7 @@ namespace ModMenu
     internal static class GameRestart
     {
         private const string SteamAppId = "892970";
+        internal static bool IsWorldLoaded => Game.instance != null || ZNet.instance != null;
 
         /// <summary>
         /// Quits and starts the game again once this process has exited (Steam ignores a launch while the game still
@@ -30,6 +31,12 @@ namespace ModMenu
 
         public static void Restart()
         {
+            // A direct Application.Quit in a world bypasses the game's normal save/logout flow.
+            if (IsWorldLoaded)
+            {
+                Plugin.Log.LogWarning("Return to the main menu before restarting the game.");
+                return;
+            }
             try
             {
                 Process self = Process.GetCurrentProcess();

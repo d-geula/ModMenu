@@ -16,6 +16,8 @@ namespace ModMenu
             ["checking"] = ("Checking... {0}/{1}", "Sprawdzam... {0}/{1}"),
             ["restart"] = ("Restart game", "Uruchom ponownie"),
             ["restart_needed"] = ("Changes apply after a restart.", "Zmiany zadziałają po ponownym uruchomieniu gry."),
+            ["restart_in_world"] = ("Mod on/off changes apply after a restart. Log out before restarting.",
+                "Włączenie/wyłączenie modów zadziała po restarcie. Najpierw wyloguj się ze świata."),
             ["no_patcher"] = ("ModMenu.Patcher is missing from BepInEx/patchers - switching mods off will not work.",
                 "Brak ModMenu.Patcher w BepInEx/patchers - wyłączanie modów nie zadziała."),
             ["search"] = ("Search...", "Szukaj..."),
